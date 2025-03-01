@@ -122,8 +122,6 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           value={serviceDate}
           onChange={(e) => setServiceDate(e.target.value)}
         />
-        <div className="form-group">
-          <label>AMC End Date:</label>
           <input
             type="date"
             value={amcEnd}
@@ -132,7 +130,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
               setAmcEnd(e.target.value)
             }}
           />
-        </div>
+      
       
         <button type="submit">Add Service</button>
       </form>
