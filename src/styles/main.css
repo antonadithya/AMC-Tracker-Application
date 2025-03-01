@@ -132,4 +132,13 @@ tr:hover {
   td:nth-of-type(7) {
     display: none !important;
   }
+
+  .table-container {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body {
+    zoom: 90%; /* Adjust as needed */
+  }
 }
