@@ -57,53 +57,47 @@ async function initDB() {
 export async function addService(service) {
   const db = await initDB()
   try {
-    console.log('Database adding service with fields:', {
-      ...service,
-      amc_end: service.amc_end || null,
-    }) // Debug log
-    
     const result = await db.run(
-      `INSERT INTO services (
-        client_name, serial_number, model, site_code, service_date,
-        amc_end, first_service, second_service
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO services (O services (
+        client_name, serial_number, model, site_code, service_date,el, site_code, service_date,
+        amc_end, first_service, second_servicerst_service, second_service
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       service.client_name,
       service.serial_number,
       service.model,
       service.site_code,
       service.service_date,
-      service.amc_end || null,
-      service.first_service || null,
-      service.second_service || null
+      service.amc_end || null,ull,
+      service.first_service || null,|| null,
+      service.second_service || null_service || null
     )
-    
+     id: result.lastID }
     // Verify the inserted record
-    if (result.lastID) {
-      const inserted = await db.get('SELECT * FROM services WHERE id = ?', result.lastID)
-      console.log('Inserted record:', inserted) // Debug log
+    if (result.lastID) { error)
+      await db.get('SELECT * FROM services WHERE id = ?', result.lastID)error.message }
     }
     
     return { success: true, id: result.lastID }
-  } catch (error) {
+  } catch (error) {support
     console.error('Database error:', error)
     return { success: false, error: error.message }
-  }
-}
+  } {
+}await db.run('BEGIN TRANSACTION')
 
-// Add batch operations support
+// Add batch operations supportice of services) {
 export async function batchAddServices(services) {
   const db = await initDB()
-  try {
-    await db.run('BEGIN TRANSACTION')
-    
-    for (const service of services) {
+  try {       client_name, serial_number, model, site_code, service_date,
+    await db.run('BEGIN TRANSACTION')         amc_end, first_service, second_service
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    for (const service of services) {m(),
       await db.run(
-        `INSERT INTO services (
-          client_name, serial_number, model, site_code, service_date,
+        `INSERT INTO services (),
+          client_name, serial_number, model, site_code, service_date, service.site_code.trim(),
           amc_end, first_service, second_service
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        service.client_name.trim(),
-        service.serial_number.trim(),
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,    service.amc_end || null,
+        service.client_name.trim(),,
+        service.serial_number.trim(),ond_service || null
         service.model.trim(),
         service.site_code.trim(),
         service.service_date,
@@ -111,74 +105,74 @@ export async function batchAddServices(services) {
         service.first_service || null,
         service.second_service || null
       )
-    }
-    
+    }ices error:', error)
+    error: error.message }
     await db.run('COMMIT')
     return { success: true }
   } catch (error) {
-    await db.run('ROLLBACK')
-    console.error('Batch add services error:', error)
-    return { success: false, error: error.message }
+    await db.run('ROLLBACK')mize getReports with better query construction
+    console.error('Batch add services error:', error)t async function getReports(filter = {}) {
+    return { success: false, error: error.message }nst db = await initDB()
   }
 }
-
+CT * FROM services WHERE 1=1`
 // Optimize getReports with better query construction
 export async function getReports(filter = {}) {
-  const db = await initDB()
-  try {
-    const params = []
+  const db = await initDB() LIKE ?)`
+  try {   params.push(`%${filter.searchTerm}%`, `%${filter.searchTerm}%`)
+    const params = []   }
     let sql = `SELECT * FROM services WHERE 1=1`
 
     if (filter.searchTerm) {
-      sql += ` AND (client_name LIKE ? OR site_code LIKE ?)`
-      params.push(`%${filter.searchTerm}%`, `%${filter.searchTerm}%`)
+      sql += ` AND (client_name LIKE ? OR site_code LIKE ?)`etedStatus === 'notcompleted') {
+      params.push(`%${filter.searchTerm}%`, `%${filter.searchTerm}%`)ql += ` AND completed = 0`
     }
 
-    if (filter.serialNumber) {
+    if (filter.serialNumber) {    sql += ` ORDER BY service_date DESC`
       sql += ` AND serial_number LIKE ?`
       params.push(`%${filter.serialNumber}%`)
     }
-
-    if (filter.completedStatus === 'completed') {
+ ...row,
+    if (filter.completedStatus === 'completed') {      completed: Boolean(row.completed)
       sql += ` AND completed = 1`
     } else if (filter.completedStatus === 'notcompleted') {
       sql += ` AND completed = 0`
-    }
-
+    }eturn []
+  }
     sql += ` ORDER BY service_date DESC`
     
     const rows = await db.all(sql, params)
     return rows.map(row => ({
-      ...row,
-      completed: Boolean(row.completed)
-    }))
-  } catch (error) {
+      ...row, {
+      completed: Boolean(row.completed)    const row = await db.get(`SELECT completed FROM services WHERE id = ?`, id)
+    }))rror: 'Service not found' }
+  } catch (error) {const newState = row.completed ? 0 : 1
     console.error('Database error:', error)
-    return []
-  }
+    return []mpleted = ?, completed_date = ? WHERE id = ?`,
+  }e,
 }
-
+d
 export async function toggleCompleted(id, completedDate) {
   const db = await initDB()
-  try {
-    const row = await db.get(`SELECT completed FROM services WHERE id = ?`, id)
-    if (!row) return { success: false, error: 'Service not found' }
-    const newState = row.completed ? 0 : 1
+  try {: result.changes > 0,
+    const row = await db.get(`SELECT completed FROM services WHERE id = ?`, id)   completed: newState
+    if (!row) return { success: false, error: 'Service not found' }   }
+    const newState = row.completed ? 0 : 1  } catch (error) {
     const result = await db.run(
       `UPDATE services SET completed = ?, completed_date = ? WHERE id = ?`,
-      newState,
+      newState,uccess: false,
       completedDate || '',
       id
     )
     return {
       success: result.changes > 0,
-      completed: newState
-    }
+      completed: newStatenction deleteService(id) {
+    })
   } catch (error) {
-    console.error('Toggle completed error:', error)
+    console.error('Toggle completed error:', error)onst result = await db.run(`DELETE FROM services WHERE id = ?`, id)
     return {
       success: false,
-      error: 'Failed to update service status'
+      error: 'Failed to update service status'nges > 0 ? 'Service deleted' : 'No service found'
     }
   }
 }
@@ -189,43 +183,32 @@ export async function deleteService(id) {
     const result = await db.run(`DELETE FROM services WHERE id = ?`, id)
     return {
       success: result.changes > 0,
-      message: result.changes > 0 ? 'Service deleted' : 'No service found'
+      message: result.changes > 0 ? 'Service deleted' : 'No service found' remark, completedDate) {
     }
   } catch (error) {
-    console.error('Delete service error:', error)
+    console.error('Delete service error:', error) })
     return {
       success: false,
       error: 'Failed to delete service'
-    }
-  }
+    }  SET completed = 1,
+  } ?,
 }
-
+ id = ?`,
 export async function completeService(id, remark, completedDate) {
   const db = await initDB()
-  try {
-    console.log('Database completeService:', { id, remark, completedDate })
-    
-    const result = await db.run(
+  try { id
+    const result = await db.run( )
       `UPDATE services
-       SET completed = 1,
+       SET completed = 1,    console.log('Complete result:', result)
            remark = ?,
-           completed_date = ?
+           completed_date = ?se, error: 'No service found with ID: ' + id }
        WHERE id = ?`,
       remark || '',
-      completedDate || '',
-      id
-    )
+      completedDate || '',catch (error) {
+      idlete error:', error)
+    )false, error: error.message }
 
-    console.log('Complete result:', result)
     if (result.changes === 0) {
-      return { success: false, error: 'No service found with ID: ' + id }
-    }
-    return { success: true }
-  } catch (error) {
-    console.error('Database complete error:', error)
-    return { success: false, error: error.message }
-  }
-}
 
 export async function editService(id, updates) {
   const db = await initDB()
@@ -281,20 +264,6 @@ export async function optimizeDatabase() {
   } catch (error) {
     console.error('Database vacuum error:', error)
     return { success: false, error: error.message }
-  }
-}
-
-export async function filterBySerialNumber(serialNumber) {
-  const db = await initDB()
-  try {
-    const rows = await db.all(`SELECT * FROM services WHERE serial_number LIKE ?`, `%${serialNumber}%`)
-    return rows.map(row => ({
-      ...row,
-      completed: Boolean(row.completed)
-    }))
-  } catch (error) {
-    console.error('Filter by serial number error:', error)
-    return []
   }
 }
 
