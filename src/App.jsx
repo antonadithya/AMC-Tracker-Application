@@ -62,6 +62,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <div className="container">
+        {/* Normal heading */}
         <h1 onClick={() => {
           setFilter({
             timeFrame: '',
@@ -74,6 +75,12 @@ const App = () => {
         }}>
           AMC
         </h1>
+
+        {/* Print-only headline */}
+        <div id="print-header">
+          AMC Tracker Report – {new Date().toLocaleDateString()}
+        </div>
+
         <ServiceForm
           onServiceAdded={refreshData}
           onSearch={handleSearch}

@@ -121,6 +121,11 @@ tr:hover {
   z-index: 1;
 }
 
+/* Hide print-header in normal view */
+#print-header {
+  display: none;
+}
+
 @media print {
   /* Hide the heading and the service form */
   h1, .service-form {
@@ -133,6 +138,12 @@ tr:hover {
     display: none !important;
   }
 
+  /* Hide the 10th column (Actions) */
+  th:nth-of-type(10),
+  td:nth-of-type(10) {
+    display: none !important;
+  }
+
   .table-container {
     max-height: none !important;
     overflow: visible !important;
@@ -140,5 +151,13 @@ tr:hover {
 
   body {
     zoom: 90%; /* Adjust as needed */
+  }
+
+  #print-header {
+    display: block !important;
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-weight: bold;
   }
 }
