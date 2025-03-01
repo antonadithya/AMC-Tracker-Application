@@ -89,7 +89,14 @@ const ReportTable = ({ data = [], filter, onServiceUpdated }) => {
     }
   }, [onServiceUpdated])
 
-  // Memoize columns definition to prevent re-renders
+  // Debug the data received from props
+  useEffect(() => {
+    if (data && data.length > 0) {
+      console.log('Sample record:', data[0]) // Debug log
+    }
+  }, [data])
+
+  // Memoize columns definition to ensure "First Service" column is included
   const columns = useMemo(() => [
     {
       header: 'Customer',
@@ -115,9 +122,12 @@ const ReportTable = ({ data = [], filter, onServiceUpdated }) => {
     },
     {
       header: 'AMC End',
-      accessorFn: row => row.amc_end
-        ? format(parseISO(row.amc_end), 'dd/MM/yyyy')
-        : '-'
+      accessorFn: row => {
+        console.log('AMC End value:', row.amc_end) // Debug log
+        return row.amc_end
+          ? format(parseISO(row.amc_end), 'dd/MM/yyyy')
+          : '-'
+      }
     },
     {
       header: 'First Service',

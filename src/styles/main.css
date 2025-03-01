@@ -132,16 +132,16 @@ tr:hover {
     display: none !important;
   }
 
-  /* Hide the 7th column (Actions) */
-  th:nth-of-type(7),
-  td:nth-of-type(7) {
-    display: none !important;
-  }
-
-  /* Hide the 10th column (Actions) */
+  /* Ensure the 10th column (Actions) is hidden */
   th:nth-of-type(10),
   td:nth-of-type(10) {
     display: none !important;
+  }
+
+  /* Explicitly ensure the "First Service" column (7th) is shown */
+  th:nth-of-type(7),
+  td:nth-of-type(7) {
+    display: table-cell !important;
   }
 
   .table-container {

@@ -68,22 +68,32 @@ ipcMain.handle('add-service', async (event, service) => {
       }
     }
 
-    // Sanitize input - include additional fields
+    // Debug log to see what's being passed
+    console.log('Electron received service data:', {
+      ...service,
+      amc_end: service.amc_end
+    })
+
+    // Sanitize input - include explicit handling for amc_end
     const sanitizedService = {
       client_name: service.client_name.trim(),
       serial_number: service.serial_number.trim(),
       model: service.model.trim(),
       site_code: service.site_code.trim(),
-      service_date: service.service_date
+      service_date: service.service_date,
+      amc_end: service.amc_end || null, // Explicitly handle amc_end
+      first_service: service.first_service || null,
+      second_service: service.second_service || null
     }
 
+    console.log('Passing sanitized service to database:', sanitizedService)
     const result = await addService(sanitizedService)
     return result
   } catch (error) {
     console.error('Add service error:', error)
     return {
       success: false,
-      error: 'Failed to add service - please check input values'
+      error: 'Failed to add service - ' + error.message
     }
   }
 })

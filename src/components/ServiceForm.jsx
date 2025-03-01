@@ -23,9 +23,12 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
     // Validate inputs
     if (!customerName.trim() || !serialNumber.trim() || !model.trim() || 
         !siteCode.trim() || !serviceDate.trim()) {
-      setError('All fields are required.')
+      setError('All fields are required except AMC End, which is optional but recommended.')
       return
     }
+
+    // Log AMC end date for debugging
+    console.log('AMC End value before submit:', amcEnd)
 
     const service = {
       client_name: customerName.trim(),
@@ -33,13 +36,13 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
       model: model.trim(),
       site_code: siteCode.trim(),
       service_date: serviceDate,
-      amc_end: amcEnd,
-      first_service: firstService,
-      second_service: secondService
+      amc_end: amcEnd || null,
+      first_service: firstService || null,
+      second_service: secondService || null
     }
 
     try {
-      console.log('Submitting service:', service) // Debug log
+      console.log('Submitting service with data:', service)
       const result = await window.electronAPI.addService(service)
       
       if (result.success) {
@@ -119,12 +122,17 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           value={serviceDate}
           onChange={(e) => setServiceDate(e.target.value)}
         />
-        <input
-          type="date"
-          placeholder="AMC End"
-          value={amcEnd}
-          onChange={(e) => setAmcEnd(e.target.value)}
-        />
+        <div className="form-group">
+          <label>AMC End Date:</label>
+          <input
+            type="date"
+            value={amcEnd}
+            onChange={(e) => {
+              console.log('Setting AMC End to:', e.target.value)
+              setAmcEnd(e.target.value)
+            }}
+          />
+        </div>
       
         <button type="submit">Add Service</button>
       </form>

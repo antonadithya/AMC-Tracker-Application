@@ -57,6 +57,11 @@ async function initDB() {
 export async function addService(service) {
   const db = await initDB()
   try {
+    console.log('Database adding service with fields:', {
+      ...service,
+      amc_end: service.amc_end || null,
+    }) // Debug log
+    
     const result = await db.run(
       `INSERT INTO services (
         client_name, serial_number, model, site_code, service_date,
@@ -71,6 +76,13 @@ export async function addService(service) {
       service.first_service || null,
       service.second_service || null
     )
+    
+    // Verify the inserted record
+    if (result.lastID) {
+      const inserted = await db.get('SELECT * FROM services WHERE id = ?', result.lastID)
+      console.log('Inserted record:', inserted) // Debug log
+    }
+    
     return { success: true, id: result.lastID }
   } catch (error) {
     console.error('Database error:', error)
