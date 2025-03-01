@@ -8,10 +8,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
   const [serviceDate, setServiceDate] = useState('')
   const [error, setError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
   const [completedStatus, setCompletedStatus] = useState('all')
-  const [isPrinterOnly, setIsPrinterOnly] = useState(false)
   const [amcEnd, setAmcEnd] = useState('')
   const [firstService, setFirstService] = useState('')
   const [secondService, setSecondService] = useState('')
@@ -27,9 +24,6 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
       return
     }
 
-    // Log AMC end date for debugging
-    console.log('AMC End value before submit:', amcEnd)
-
     const service = {
       client_name: customerName.trim(),
       serial_number: serialNumber.trim(),
@@ -42,7 +36,6 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
     }
 
     try {
-      console.log('Submitting service with data:', service)
       const result = await window.electronAPI.addService(service)
       
       if (result.success) {
@@ -67,136 +60,96 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
     }
   }
 
-  const handleSearch = () => {
-    onSearch({
-      searchTerm,
-      startDate,
-      endDate,
-      completedStatus,
-      printerOnly: isPrinterOnly
-    });
-  };
+  const handleSearch = (e) => {
+    e.preventDefault()
+    onSearch({ searchTerm, completedStatus, serialNumber })
+  }
 
   return (
     <div className="service-form">
       <h2>Add AMC Service</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Customer Name"
-          value={customerName}
-          onChange={(e) => setCustomerName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Serial Number"
-          value={serialNumber}
-          onChange={(e) => setSerialNumber(e.target.value)}
-        />
-        <input
-          type="text"
-          list="modelList"
-          placeholder="Model"
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-        />
-        <datalist id="modelList">
-          <option value="Epson PLQ 20" />
-          <option value="Epson PLQ 35" />
-          <option value="Epson PLQ 40" />
-          <option value="Epson PLQ 50" />
-          <option value="LQ-310" />
-          <option value="2190II" />
-          <option value="M3180" />
-        </datalist>
-        <input
-          type="text"
-          placeholder="Site Code"
-          value={siteCode}
-          onChange={(e) => setSiteCode(e.target.value)}
-        />
-        <input
-          type="date"
-          placeholder="Service Date (AMC Start)"
-          value={serviceDate}
-          onChange={(e) => setServiceDate(e.target.value)}
-        />
+        <div className="form-group">
+          <label>Customer Name:</label>
+          <input
+            type="text"
+            placeholder="Customer Name"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Serial Number:</label>
+          <input
+            type="text"
+            placeholder="Serial Number"
+            value={serialNumber}
+            onChange={(e) => setSerialNumber(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Model:</label>
+          <input
+            type="text"
+            list="modelList"
+            placeholder="Model"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+          />
+          <datalist id="modelList">
+            <option value="Epson PLQ 20" />
+            <option value="Epson PLQ 35" />
+            <option value="Epson PLQ 40" />
+            <option value="Epson PLQ 50" />
+            <option value="LQ-310" />
+            <option value="2190II" />
+            <option value="M3180" />
+          </datalist>
+        </div>
+        <div className="form-group">
+          <label>Site Code:</label>
+          <input
+            type="text"
+            placeholder="Site Code"
+            value={siteCode}
+            onChange={(e) => setSiteCode(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Service Date (AMC Start):</label>
+          <input
+            type="date"
+            value={serviceDate}
+            onChange={(e) => setServiceDate(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>AMC End Date:</label>
           <input
             type="date"
             value={amcEnd}
-            onChange={(e) => {
-              console.log('Setting AMC End to:', e.target.value)
-              setAmcEnd(e.target.value)
-            }}
+            onChange={(e) => setAmcEnd(e.target.value)}
           />
-      
-      
+        </div>
+        <div className="form-group">
+          <label>First Service:</label>
+          <input
+            type="date"
+            value={firstService}
+            onChange={(e) => setFirstService(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Second Service:</label>
+          <input
+            type="date"
+            value={secondService}
+            onChange={(e) => setSecondService(e.target.value)}
+          />
+        </div>
         <button type="submit">Add Service</button>
       </form>
-
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="Search by Customer or Site"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            // Trigger search on each change
-            onSearch({
-              searchTerm: e.target.value,
-              startDate,
-              endDate,
-              completedStatus,
-              printerOnly: isPrinterOnly
-            });
-          }}
-        />
-        
-        <select
-          value={completedStatus}
-          onChange={(e) => {
-            setCompletedStatus(e.target.value);
-            // Trigger search on status change
-            onSearch({
-              searchTerm,
-              startDate,
-              endDate,
-              completedStatus: e.target.value,
-              printerOnly: isPrinterOnly
-            });
-          }}
-        >
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="notcompleted">Not Completed</option>
-        </select>
-       
-        <button type="button" onClick={handleSearch}>
-          Search
-        </button>
-
-        <button
-          id="printerButton"
-          type="button"
-          onClick={() => {
-            setIsPrinterOnly(!isPrinterOnly)
-            onSearch({
-              searchTerm,
-              startDate,
-              endDate,
-              completedStatus,
-              printerOnly: !isPrinterOnly
-            })
-            // Short delay allows table to update before printing
-            setTimeout(() => {
-              window.print()
-            }, 700)
-          }}
-        >
-          🖨
-        </button>
-      </div>
     </div>
   )
 }

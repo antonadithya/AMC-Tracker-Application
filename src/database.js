@@ -134,6 +134,11 @@ export async function getReports(filter = {}) {
       params.push(`%${filter.searchTerm}%`, `%${filter.searchTerm}%`)
     }
 
+    if (filter.serialNumber) {
+      sql += ` AND serial_number LIKE ?`
+      params.push(`%${filter.serialNumber}%`)
+    }
+
     if (filter.completedStatus === 'completed') {
       sql += ` AND completed = 1`
     } else if (filter.completedStatus === 'notcompleted') {
@@ -276,6 +281,20 @@ export async function optimizeDatabase() {
   } catch (error) {
     console.error('Database vacuum error:', error)
     return { success: false, error: error.message }
+  }
+}
+
+export async function filterBySerialNumber(serialNumber) {
+  const db = await initDB()
+  try {
+    const rows = await db.all(`SELECT * FROM services WHERE serial_number LIKE ?`, `%${serialNumber}%`)
+    return rows.map(row => ({
+      ...row,
+      completed: Boolean(row.completed)
+    }))
+  } catch (error) {
+    console.error('Filter by serial number error:', error)
+    return []
   }
 }
 

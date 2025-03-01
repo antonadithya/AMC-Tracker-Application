@@ -40,4 +40,13 @@ ipcMain.handle('add-service', async (_, service) => {
     }
   }
 })
+
+ipcMain.handle('filter-by-serial-number', async (_, serialNumber) => {
+  try {
+    return await filterBySerialNumber(serialNumber)
+  } catch (error) {
+    console.error('Filter by serial number error:', error)
+    return { success: false, error: error.message }
+  }
+})
 // ...existing code...

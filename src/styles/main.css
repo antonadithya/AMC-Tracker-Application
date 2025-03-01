@@ -6,6 +6,7 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px; /* Add extra padding for cleaner layout */
 }
 
 h1 {
@@ -31,7 +32,7 @@ table {
 }
 
 th, td {
-  padding: 10px;
+  padding: 12px; /* Increase cell padding */
   border: 1px solid #ddd;
   text-align: left;
 }
@@ -46,7 +47,7 @@ tr:hover {
 }
 
 .report-container {
-  max-height: 400px;
+  max-height: 600px; /* Increase table container height for better readability */
   overflow-y: auto;
 }
 
@@ -101,7 +102,7 @@ tr:hover {
   overflow-x: auto;
   margin-top: 20px;
   overflow-y: auto;
-  max-height: 400px; /* Adjust the height as needed */
+  max-height: 600px; /* Increase table container height for better readability */
 }
 
 .table-container table {
@@ -111,7 +112,7 @@ tr:hover {
 
 .table-container th, .table-container td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px; /* Increase cell padding */
 }
 
 .table-container th {
@@ -127,8 +128,8 @@ tr:hover {
 }
 
 @media print {
-  /* Hide the heading and the service form */
-  h1, .service-form {
+  /* Hide the heading, service form, navigation bar, filter form, and search services title */
+  h1, .service-form, .navigation, .filters, .search-services form, .search-services h2 {
     display: none !important;
   }
 
@@ -160,4 +161,88 @@ tr:hover {
     margin-bottom: 10px;
     font-weight: bold;
   }
+
+  /* Add auto-selected title */
+  #auto-selected-title {
+    display: block !important;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+}
+
+.navigation {
+  display: flex;
+  justify-content: flex-start; /* Align icons to the left */
+  gap: 20px; /* Add space between icons */
+  margin-bottom: 20px;
+}
+
+.nav-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.nav-icon span {
+  font-size: 1.5rem; /* Reduce icon size */
+}
+
+.nav-icon p {
+  margin: 0;
+  font-size: 0.875rem; /* Reduce font size */
+}
+
+.service-form {
+  background-color: #f9f9f9;
+  padding: 8px; /* Further reduce padding */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* Further reduce max width */
+  margin: 0 auto; /* Center the form */
+}
+
+.service-form h2 {
+  margin-bottom: 8px; /* Further reduce margin */
+}
+
+.service-form .form-group {
+  margin-bottom: 6px; /* Further reduce margin */
+}
+
+.service-form label {
+  display: block;
+  margin-bottom: 3px; /* Further reduce margin */
+  font-weight: bold;
+}
+
+.service-form input,
+.service-form textarea {
+  width: 100%;
+  padding: 5px; /* Further reduce padding */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.service-form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 10px; /* Further reduce padding */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px; /* Further reduce font size */
+}
+
+.service-form button:hover {
+  background-color: #45a049;
+}
+
+.service-form .error {
+  color: red;
+  margin-bottom: 6px; /* Further reduce margin */
 }

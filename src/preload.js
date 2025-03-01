@@ -10,4 +10,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   editService: (id, updates) => ipcRenderer.invoke('edit-service', id, updates),
   toggleCompleted: (id, completedDate, remark) => 
     ipcRenderer.invoke('toggle-completed', id, completedDate, remark),
+  filterBySerialNumber: (serialNumber) => ipcRenderer.invoke('filter-by-serial-number', serialNumber)
 })
