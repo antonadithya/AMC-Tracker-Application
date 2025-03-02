@@ -1,6 +1,6 @@
 import '../browser-electron.js'
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom'
 import ServiceForm from './components/ServiceForm'
 import SearchServices from './components/SearchServices'
 import ReportTable from './components/ReportTable'

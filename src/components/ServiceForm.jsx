@@ -71,7 +71,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Customer Name:</label>
+          <label>Customer Name</label>
           <input
             type="text"
             placeholder="Customer Name"
@@ -80,7 +80,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           />
         </div>
         <div className="form-group">
-          <label>Serial Number:</label>
+          <label>Serial Number</label>
           <input
             type="text"
             placeholder="Serial Number"
@@ -98,17 +98,21 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
             onChange={(e) => setModel(e.target.value)}
           />
           <datalist id="modelList">
-            <option value="Epson PLQ 20" />
-            <option value="Epson PLQ 35" />
-            <option value="Epson PLQ 40" />
-            <option value="Epson PLQ 50" />
+            <option value="PLQ 20" />
+            <option value="PLQ 35" />
+            <option value="PLQ 40" />
+            <option value="PLQ 50" />
             <option value="LQ-310" />
-            <option value="2190II" />
+            <option value="LQ-50" />
+            <option value="LQ-2190" />
+            <option value="LQ-2190 II" />
+            <option value="TM T81 III" />
+            <option value="TM 220D" />
             <option value="M3180" />
           </datalist>
         </div>
         <div className="form-group">
-          <label>Site Code:</label>
+          <label>Site Code</label>
           <input
             type="text"
             placeholder="Site Code"
@@ -117,7 +121,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           />
         </div>
         <div className="form-group">
-          <label>Service Date (AMC Start):</label>
+          <label>AMC Star Date</label>
           <input
             type="date"
             value={serviceDate}
@@ -125,7 +129,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           />
         </div>
         <div className="form-group">
-          <label>AMC End Date:</label>
+          <label>AMC End Date</label>
           <input
             type="date"
             value={amcEnd}
@@ -133,7 +137,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           />
         </div>
         <div className="form-group">
-          <label>First Service:</label>
+          <label>First Service</label>
           <input
             type="date"
             value={firstService}
@@ -141,7 +145,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
           />
         </div>
         <div className="form-group">
-          <label>Second Service:</label>
+          <label>Second Service</label>
           <input
             type="date"
             value={secondService}

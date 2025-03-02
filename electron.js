@@ -29,7 +29,14 @@ function createWindow () {
     mainWindow.loadURL('http://localhost:3000')
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(join(currentDir, 'dist/renderer/index.html'))
+    // Fix path resolution in production
+    try {
+      const indexPath = join(currentDir, 'dist/renderer/index.html')
+      console.log('Loading index file from:', indexPath)
+      mainWindow.loadFile(indexPath)
+    } catch (error) {
+      console.error('Error loading index file:', error)
+    }
   }
 
   // Handle window close gracefully
