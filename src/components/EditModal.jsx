@@ -13,16 +13,59 @@ const EditModal = ({ service, onClose, onSave }) => {
     second_service: service.second_service?.split('T')[0] || '',
     remark: service.remark || ''
   })
+  const [success, setSuccess] = useState(false)
+
+  // Helper function to make text uppercase for customer names
+  const makeUppercase = (text) => {
+    if (!text) return '';
+    return text.toUpperCase();
+  };
+
+  // Helper function to capitalize first letter of each word for site codes
+  const capitalizeWords = (text) => {
+    if (!text) return '';
+    return text
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log("Submitting form data:", formData) // Debug log
-    onSave(formData) // Send all form data as updates
+    
+    // Apply formatting before submission
+    const updatedData = {
+      ...formData,
+      client_name: makeUppercase(formData.client_name.trim()),
+      site_code: capitalizeWords(formData.site_code.trim()),
+      serial_number: formData.serial_number.trim(),
+      model: formData.model.trim()
+    };
+    
+    console.log("Submitting form data:", updatedData) // Debug log
+    
+    // Show success message
+    setSuccess(true)
+    
+    // Wait a moment before closing
+    setTimeout(() => {
+      onSave(updatedData) // Send formatted data
+    }, 1000)
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    
+    // Apply formatting in real-time for specific fields
+    if (name === 'client_name') {
+      setFormData(prev => ({ ...prev, [name]: makeUppercase(value) }))
+    } 
+    else if (name === 'site_code') {
+      setFormData(prev => ({ ...prev, [name]: capitalizeWords(value) }))
+    } 
+    else {
+      setFormData(prev => ({ ...prev, [name]: value }))
+    }
   }
 
   return (
@@ -30,6 +73,9 @@ const EditModal = ({ service, onClose, onSave }) => {
       <div className="modal-content">
         <form onSubmit={handleSubmit}>
           <h3>Edit Service</h3>
+          
+          {success && <p className="success">Service updated successfully!</p>}
+          
           <div className="form-group">
             <label>Customer Name:</label>
             <input
@@ -57,7 +103,21 @@ const EditModal = ({ service, onClose, onSave }) => {
               value={formData.model}
               onChange={handleChange}
               placeholder="Model"
+              list="modelList"
             />
+            <datalist id="modelList">
+              <option value="PLQ 20" />
+              <option value="PLQ 35" />
+              <option value="PLQ 40" />
+              <option value="PLQ 50" />
+              <option value="LQ-310" />
+              <option value="LQ-50" />
+              <option value="LQ-2190" />
+              <option value="LQ-2190 II" />
+              <option value="TM T81 III" />
+              <option value="TM 220D" />
+              <option value="M3180" />
+            </datalist>
           </div>
           
           <div className="form-group">

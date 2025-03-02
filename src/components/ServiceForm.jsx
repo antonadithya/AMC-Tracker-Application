@@ -14,23 +14,52 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
   const [secondService, setSecondService] = useState('')
   const [success, setSuccess] = useState(false);
 
+  // Helper function to make text uppercase for customer names
+  const makeUppercase = (text) => {
+    if (!text) return '';
+    return text.toUpperCase();
+  };
+
+  // Helper function to capitalize first letter of each word for site codes
+  const capitalizeWords = (text) => {
+    if (!text) return '';
+    return text
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  // Real-time capitalization as user types
+  const handleCustomerNameChange = (e) => {
+    setCustomerName(makeUppercase(e.target.value));
+  };
+
+  const handleSiteCodeChange = (e) => {
+    setSiteCode(capitalizeWords(e.target.value));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setSuccess(false);
 
-    // Validate inputs
-    if (!customerName.trim() || !serialNumber.trim() || !model.trim() || 
-        !siteCode.trim() || !serviceDate.trim()) {
-      setError('All fields are required except AMC End, which is optional but recommended.')
+    // Apply formatting and validate
+    const formattedName = makeUppercase(customerName.trim());
+    const formattedSiteCode = capitalizeWords(siteCode.trim());
+    const formattedSerialNumber = serialNumber.trim();
+    const formattedModel = model.trim();
+
+    if (!formattedName || !formattedSerialNumber || !formattedModel || 
+        !formattedSiteCode || !serviceDate.trim()) {
+      setError('All required fields must be filled')
       return
     }
 
     const service = {
-      client_name: customerName.trim(),
-      serial_number: serialNumber.trim(),
-      model: model.trim(),
-      site_code: siteCode.trim(),
+      client_name: formattedName,
+      serial_number: formattedSerialNumber,
+      model: formattedModel,
+      site_code: formattedSiteCode,
       service_date: serviceDate,
       amc_end: amcEnd || null,
       first_service: firstService || null,
@@ -83,7 +112,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
             type="text"
             placeholder="Customer Name"
             value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
+            onChange={handleCustomerNameChange}
           />
         </div>
         <div className="form-group">
@@ -124,7 +153,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
             type="text"
             placeholder="Site Code"
             value={siteCode}
-            onChange={(e) => setSiteCode(e.target.value)}
+            onChange={handleSiteCodeChange}
           />
         </div>
         <div className="form-group">
