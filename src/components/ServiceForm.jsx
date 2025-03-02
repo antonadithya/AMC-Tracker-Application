@@ -12,10 +12,12 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
   const [amcEnd, setAmcEnd] = useState('')
   const [firstService, setFirstService] = useState('')
   const [secondService, setSecondService] = useState('')
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccess(false);
 
     // Validate inputs
     if (!customerName.trim() || !serialNumber.trim() || !model.trim() || 
@@ -49,8 +51,12 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
         setFirstService('')
         setSecondService('')
         
-        // Notify parent component
-        onServiceAdded()
+        // Show success message and redirect
+        setSuccess(true);
+        setTimeout(() => {
+          // Call the onServiceAdded callback after a short delay to show success message
+          onServiceAdded();
+        }, 1000);
       } else {
         setError('Failed to add service: ' + (result.error || 'Unknown error'))
       }
@@ -69,6 +75,7 @@ const ServiceForm = ({ onServiceAdded, onSearch }) => {
     <div className="service-form">
       <h2>Add AMC Service</h2>
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">Service added successfully! Redirecting to search...</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Customer Name</label>

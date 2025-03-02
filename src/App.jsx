@@ -1,11 +1,23 @@
 import '../browser-electron.js'
 import React from 'react'
-import { HashRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
 import ServiceForm from './components/ServiceForm'
 import SearchServices from './components/SearchServices'
 import ReportTable from './components/ReportTable'
 import './styles/main.css'
 import ErrorBoundary from './components/ErrorBoundary'
+
+// Create a wrapper component for ServiceForm that can use useNavigate
+const ServiceFormWithNavigation = () => {
+  const navigate = useNavigate();
+  
+  const handleServiceAdded = () => {
+    // Navigate to the search-services route after successful service addition
+    navigate('/search-services');
+  };
+  
+  return <ServiceForm onServiceAdded={handleServiceAdded} onSearch={() => {}} />;
+};
 
 const App = () => {
   const handlePrint = () => {
@@ -39,7 +51,7 @@ const App = () => {
           </div>
           <Routes>
             <Route path="/" element={<Navigate to="/search-services" />} />
-            <Route path="/add-service" element={<ServiceForm onServiceAdded={() => {}} />} />
+            <Route path="/add-service" element={<ServiceFormWithNavigation />} />
             <Route path="/search-services" element={<SearchServices />} />
           </Routes>
         </div>
