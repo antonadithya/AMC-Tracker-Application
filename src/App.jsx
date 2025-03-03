@@ -47,7 +47,7 @@ const App = () => {
             </div>
           </nav>
           <div id="auto-selected-title" style={{ display: 'none' }}>
-            Auto-Selected Title
+            AMC Tracking Report
           </div>
           <Routes>
             <Route path="/" element={<Navigate to="/search-services" />} />
